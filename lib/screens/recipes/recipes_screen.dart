@@ -9,15 +9,46 @@ class RecipesScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text("Recetas saludables"),
+        title: const Text("Recetas para ti 🥗"),
         backgroundColor: AppColors.background,
+        elevation: 0,
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: const [
-          RecipeCard("Avena con fruta", "\$20", "10 min"),
-          RecipeCard("Ensalada con pollo", "\$45", "20 min"),
-          RecipeCard("Tostadas saludables", "\$30", "15 min"),
+
+          Text(
+            "Sugerencias basadas en tu presupuesto",
+            style: TextStyle(color: Color(0xFF0B5351)),
+          ),
+
+          SizedBox(height: 16),
+
+          RecipeCard(
+            title: "Avena con fruta",
+            price: "\$20",
+            time: "10 min",
+            image:
+                "https://images.unsplash.com/photo-1517673400267-0251440c45dc",
+            isRecommended: true,
+          ),
+
+          RecipeCard(
+            title: "Ensalada con pollo",
+            price: "\$45",
+            time: "20 min",
+            image:
+                "https://images.unsplash.com/photo-1546069901-ba9599a7e63c",
+          ),
+
+          RecipeCard(
+            title: "Tostadas saludables",
+            price: "\$30",
+            time: "15 min",
+            image:
+                "https://images.unsplash.com/photo-1490645935967-10de6ba17061",
+            isRecommended: true,
+          ),
         ],
       ),
     );
@@ -28,40 +59,134 @@ class RecipeCard extends StatelessWidget {
   final String title;
   final String price;
   final String time;
+  final String image;
+  final bool isRecommended;
 
-  const RecipeCard(this.title, this.price, this.time, {super.key});
+  const RecipeCard({
+    super.key,
+    required this.title,
+    required this.price,
+    required this.time,
+    required this.image,
+    this.isRecommended = false,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 15),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 70,
-            height: 70,
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(10),
+    return Stack(
+      children: [
+        Container(
+          margin: const EdgeInsets.only(bottom: 15),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.08),
+                blurRadius: 10,
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+
+              /// 📸 IMAGEN SEGURA
+              ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  bottomLeft: Radius.circular(20),
+                ),
+                child: Image.network(
+                  image,
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.cover,
+
+                  /// 🔄 LOADING
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Container(
+                      width: 100,
+                      height: 100,
+                      color: Colors.grey[100],
+                      child: const Center(
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                    );
+                  },
+
+                  /// ❌ ERROR
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      width: 100,
+                      height: 100,
+                      color: Colors.grey[200],
+                      child: const Icon(
+                        Icons.restaurant,
+                        color: Colors.grey,
+                        size: 35,
+                      ),
+                    );
+                  },
+                ),
+              ),
+
+              const SizedBox(width: 12),
+
+              /// 📄 INFO
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+
+                      const SizedBox(height: 6),
+
+                      Text(
+                        "$price • $time",
+                        style: TextStyle(color: Colors.grey[600]),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              /// ❤️ FAVORITO
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.favorite_border),
+              ),
+            ],
+          ),
+        ),
+
+        /// 🤖 BADGE IA
+        if (isRecommended)
+          Positioned(
+            top: 8,
+            left: 8,
+            child: Container(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: Colors.green,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Text(
+                "IA",
+                style: TextStyle(color: Colors.white, fontSize: 12),
+              ),
             ),
           ),
-          const SizedBox(width: 10),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(title,
-                  style: const TextStyle(fontWeight: FontWeight.bold)),
-              Text("💸 $price"),
-              Text("⏱ $time"),
-            ],
-          )
-        ],
-      ),
+      ],
     );
   }
 }
