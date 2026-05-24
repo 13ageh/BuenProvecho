@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'register_profile_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -13,202 +14,144 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _obscurePassword = true;
   bool _obscureConfirm = true;
 
+  bool isCheckingUser = false;
+  bool usernameAvailable = true;
+
   final TextEditingController nameCtrl = TextEditingController();
   final TextEditingController emailCtrl = TextEditingController();
+  final TextEditingController usernameCtrl = TextEditingController();
   final TextEditingController passCtrl = TextEditingController();
   final TextEditingController confirmCtrl = TextEditingController();
 
-  // 👉 estilo reutilizable
-  InputDecoration customInput(String label, IconData icon,
-      {Widget? suffix}) {
+  final List<String> usuariosExistentes = ["vale", "admin", "test"];
+
+  // =========================
+  // INPUT STYLE (COLORES)
+  // =========================
+  InputDecoration customInput(String label, IconData icon) {
     return InputDecoration(
       labelText: label,
-      prefixIcon: Icon(icon),
-      suffixIcon: suffix,
+      prefixIcon: Icon(icon, color: Colors.green),
       filled: true,
-      fillColor: Colors.grey[100],
-      contentPadding: const EdgeInsets.symmetric(vertical: 18),
-      border: OutlineInputBorder(
+      fillColor: Colors.green.shade50,
+      focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: BorderSide.none,
+        borderSide: const BorderSide(color: Colors.green),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: BorderSide.none,
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(color: Color(0xff0B5351), width: 1.5),
+        borderSide: BorderSide(color: Colors.green.shade100),
       ),
     );
+  }
+
+  Future<void> checkUsername(String value) async {
+    setState(() => isCheckingUser = true);
+
+    await Future.delayed(const Duration(milliseconds: 600));
+
+    setState(() {
+      usernameAvailable =
+          !usuariosExistentes.contains(value.toLowerCase());
+      isCheckingUser = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF7F3ED),
+
       appBar: AppBar(
-        title: const Text("Bienvenido"),
-        centerTitle: true,
+        backgroundColor: Colors.green,
+        title: const Text(
+          "Registro",
+          style: TextStyle(color: Colors.white),
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const SizedBox(height: 20),
 
-                const Text(
-                  "Crea tu cuenta",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+
+              TextFormField(
+                controller: nameCtrl,
+                decoration: customInput("Nombre completo", Icons.person),
+              ),
+
+              const SizedBox(height: 10),
+
+              TextFormField(
+                controller: emailCtrl,
+                decoration: customInput("Email", Icons.email),
+              ),
+
+              const SizedBox(height: 10),
+
+              TextFormField(
+                controller: usernameCtrl,
+                decoration: customInput("Usuario", Icons.alternate_email),
+                onChanged: checkUsername,
+                validator: (_) {
+                  if (!usernameAvailable) {
+                    return "Usuario no disponible";
+                  }
+                  return null;
+                },
+              ),
+
+              const SizedBox(height: 10),
+
+              TextFormField(
+                controller: passCtrl,
+                obscureText: _obscurePassword,
+                decoration: customInput("Contraseña", Icons.lock),
+              ),
+
+              const SizedBox(height: 10),
+
+              TextFormField(
+                controller: confirmCtrl,
+                obscureText: _obscureConfirm,
+                decoration: customInput("Confirmar", Icons.lock_outline),
+                validator: (v) =>
+                    v != passCtrl.text ? "No coincide" : null,
+              ),
+
+              const SizedBox(height: 25),
+
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 30, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-
-                const SizedBox(height: 30),
-
-                // Nombre
-                TextFormField(
-                  controller: nameCtrl,
-                  decoration: customInput('Nombre', Icons.person),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Campo obligatorio';
-                    }
-                    return null;
-                  },
-                ),
-
-                const SizedBox(height: 16),
-
-                // Email
-                TextFormField(
-                  controller: emailCtrl,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: customInput('Correo electrónico', Icons.email),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Campo obligatorio';
-                    }
-                    if (!value.contains('@')) {
-                      return 'Correo inválido';
-                    }
-                    return null;
-                  },
-                ),
-
-                const SizedBox(height: 16),
-
-                // Password
-                TextFormField(
-                  controller: passCtrl,
-                  obscureText: _obscurePassword,
-                  decoration: customInput(
-                    'Contraseña',
-                    Icons.lock,
-                    suffix: IconButton(
-                      icon: Icon(_obscurePassword
-                          ? Icons.visibility
-                          : Icons.visibility_off),
-                      onPressed: () {
-                        setState(() {
-                          _obscurePassword = !_obscurePassword;
-                        });
-                      },
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.length < 8) {
-                      return 'Mínimo 8 caracteres';
-                    }
-                    return null;
-                  },
-                ),
-
-                const SizedBox(height: 16),
-
-                // Confirm Password
-                TextFormField(
-                  controller: confirmCtrl,
-                  obscureText: _obscureConfirm,
-                  decoration: customInput(
-                    'Confirmar contraseña',
-                    Icons.lock_outline,
-                    suffix: IconButton(
-                      icon: Icon(_obscureConfirm
-                          ? Icons.visibility
-                          : Icons.visibility_off),
-                      onPressed: () {
-                        setState(() {
-                          _obscureConfirm = !_obscureConfirm;
-                        });
-                      },
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value != passCtrl.text) {
-                      return 'Las contraseñas no coinciden';
-                    }
-                    return null;
-                  },
-                ),
-
-                const SizedBox(height: 30),
-
-                // Botón registrar
-                SizedBox(
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (_) => const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                        );
-
-                        await Future.delayed(const Duration(seconds: 2));
-
-                        Navigator.pop(context);
-
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text('Registro exitoso')),
-                        );
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xff0B5351),
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
+                child: const Text("Siguiente"),
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => RegisterProfileScreen(
+                          name: nameCtrl.text,
+                          email: emailCtrl.text,
+                          username: usernameCtrl.text,
+                          password: passCtrl.text,
+                        ),
                       ),
-                    ),
-                    child: const Text(
-                      'Registrate',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 20),
-
-                // Volver
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child:
-                      const Text("¿Ya tienes cuenta? Inicia sesión"),
-                ),
-              ],
-            ),
+                    );
+                  }
+                },
+              )
+            ],
           ),
         ),
       ),

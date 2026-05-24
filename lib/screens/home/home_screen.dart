@@ -64,17 +64,9 @@ class HomeScreen extends StatelessWidget {
 
             const SizedBox(height: 25),
 
-            /// ⚡ ACCIONES RÁPIDAS
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                QuickButton(icon: Icons.restaurant, text: "Recetas"),
-                QuickButton(icon: Icons.map, text: "Lugares"),
-                QuickButton(icon: Icons.forum, text: "Foro"),
-              ],
-            ),
+          
 
-            const SizedBox(height: 30),
+          
 
             /// 🥗 RECETA DEL DÍA
             sectionTitle("🥗 Receta del día"),
