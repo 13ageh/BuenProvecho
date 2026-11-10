@@ -16,7 +16,6 @@ class RecipesScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: const [
-
           Text(
             "Sugerencias basadas en tu presupuesto",
             style: TextStyle(color: Color(0xFF0B5351)),
@@ -37,8 +36,7 @@ class RecipesScreen extends StatelessWidget {
             title: "Ensalada con pollo",
             price: "\$45",
             time: "20 min",
-            image:
-                "https://images.unsplash.com/photo-1546069901-ba9599a7e63c",
+            image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c",
           ),
 
           RecipeCard(
@@ -82,14 +80,13 @@ class RecipeCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.08),
+                color: Colors.black.withValues(alpha: 0.08),
                 blurRadius: 10,
               ),
             ],
           ),
           child: Row(
             children: [
-
               /// 📸 IMAGEN SEGURA
               ClipRRect(
                 borderRadius: const BorderRadius.only(
@@ -167,25 +164,6 @@ class RecipeCard extends StatelessWidget {
             ],
           ),
         ),
-
-        /// 🤖 BADGE IA
-        if (isRecommended)
-          Positioned(
-            top: 8,
-            left: 8,
-            child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: Colors.green,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Text(
-                "IA",
-                style: TextStyle(color: Colors.white, fontSize: 12),
-              ),
-            ),
-          ),
       ],
     );
   }

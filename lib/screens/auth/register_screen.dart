@@ -11,8 +11,8 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  bool _obscurePassword = true;
-  bool _obscureConfirm = true;
+  final bool _obscurePassword = true;
+  final bool _obscureConfirm = true;
 
   bool isCheckingUser = false;
   bool usernameAvailable = true;
@@ -51,8 +51,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     await Future.delayed(const Duration(milliseconds: 600));
 
     setState(() {
-      usernameAvailable =
-          !usuariosExistentes.contains(value.toLowerCase());
+      usernameAvailable = !usuariosExistentes.contains(value.toLowerCase());
       isCheckingUser = false;
     });
   }
@@ -63,11 +62,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       backgroundColor: const Color(0xFFF7F3ED),
 
       appBar: AppBar(
-        backgroundColor: Colors.green,
-        title: const Text(
-          "Registro",
-          style: TextStyle(color: Colors.white),
-        ),
+        backgroundColor: const Color.fromARGB(255, 34, 129, 74),
+        title: const Text("Registro", style: TextStyle(color: Colors.white)),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
 
@@ -77,7 +73,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
           key: _formKey,
           child: Column(
             children: [
-
               TextFormField(
                 controller: nameCtrl,
                 decoration: customInput("Nombre completo", Icons.person),
@@ -118,18 +113,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 controller: confirmCtrl,
                 obscureText: _obscureConfirm,
                 decoration: customInput("Confirmar", Icons.lock_outline),
-                validator: (v) =>
-                    v != passCtrl.text ? "No coincide" : null,
+                validator: (v) => v != passCtrl.text ? "No coincide" : null,
               ),
 
               const SizedBox(height: 25),
 
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
+                  backgroundColor: const Color.fromARGB(255, 65, 179, 122),
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 30, vertical: 12),
+                    horizontal: 30,
+                    vertical: 12,
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -150,7 +146,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     );
                   }
                 },
-              )
+              ),
             ],
           ),
         ),

@@ -11,7 +11,6 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
-
   late AnimationController _controller;
   late Animation<double> _animation;
 
@@ -24,10 +23,7 @@ class _SplashScreenState extends State<SplashScreen>
       duration: const Duration(seconds: 2),
     );
 
-    _animation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-    );
+    _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
 
     _controller.forward();
 
@@ -49,16 +45,13 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: const Color(0xFEEFE5),
+        color: const Color(0x00feefe5),
         child: Center(
           child: FadeTransition(
             opacity: _animation,
             child: ScaleTransition(
               scale: _animation,
-              child: Image.asset(
-                'assets/images/sinfondo.png',
-                width: 200,
-              ),
+              child: Image.asset('assets/images/sinfondo.png', width: 200),
             ),
           ),
         ),

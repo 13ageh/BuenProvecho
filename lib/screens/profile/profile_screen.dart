@@ -8,7 +8,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-
   int selectedAvatar = 0;
 
   final List<String> avatars = [
@@ -26,10 +25,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-
               // Banner superior
               Container(
-                height: 220,
+                height: 300,
                 width: double.infinity,
                 decoration: const BoxDecoration(
                   color: Color(0xFF7BAE7F),
@@ -41,15 +39,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-
                     // Avatar seleccionado
                     CircleAvatar(
-                      radius: 55,
+                      radius: 60,
                       backgroundColor: Colors.white,
                       child: CircleAvatar(
                         radius: 50,
-                        backgroundImage:
-                            AssetImage(avatars[selectedAvatar]),
+                        backgroundImage: AssetImage(avatars[selectedAvatar]),
                       ),
                     ),
 
@@ -73,9 +69,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         scrollDirection: Axis.horizontal,
                         itemCount: avatars.length,
                         itemBuilder: (context, index) {
-
-                          final isSelected =
-                              selectedAvatar == index;
+                          final isSelected = selectedAvatar == index;
 
                           return GestureDetector(
                             onTap: () {
@@ -84,9 +78,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               });
                             },
                             child: Container(
-                              margin: const EdgeInsets.symmetric(
-                                horizontal: 6,
-                              ),
+                              margin: const EdgeInsets.symmetric(horizontal: 6),
                               padding: const EdgeInsets.all(3),
                               decoration: BoxDecoration(
                                 border: Border.all(
@@ -99,8 +91,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                               child: CircleAvatar(
                                 radius: 25,
-                                backgroundImage:
-                                    AssetImage(avatars[index]),
+                                backgroundImage: AssetImage(avatars[index]),
                               ),
                             ),
                           );
@@ -117,12 +108,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
-                  mainAxisAlignment:
-                      MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    profileStat("24", "Recetas"),
-                    profileStat("12", "Favoritas"),
-                    profileStat("5", "Publicaciones"),
+                    profileStat("0", "Recetas"),
+                    profileStat("0", "Favoritas"),
+                    profileStat("0", "Publicaciones"),
                   ],
                 ),
               ),
@@ -130,25 +120,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               const SizedBox(height: 30),
 
               // Opciones
-              profileOption(
-                  Icons.favorite,
-                  "Recetas favoritas"
-              ),
+              profileOption(Icons.favorite, "Recetas favoritas"),
 
-              profileOption(
-                  Icons.settings,
-                  "Configuración"
-              ),
+              profileOption(Icons.settings, "Configuración"),
 
-              profileOption(
-                  Icons.person,
-                  "Editar perfil"
-              ),
+              profileOption(Icons.person, "Editar perfil"),
 
-              profileOption(
-                  Icons.logout,
-                  "Cerrar sesión"
-              ),
+              profileOption(Icons.logout, "Cerrar sesión"),
 
               const SizedBox(height: 20),
             ],
@@ -163,59 +141,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
       children: [
         Text(
           number,
-          style: const TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-          ),
+          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
         ),
         Text(title),
       ],
     );
   }
 
-  Widget profileOption(
-      IconData icon,
-      String title,
-  ) {
+  Widget profileOption(IconData icon, String title) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 20,
-        vertical: 8,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       child: Container(
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(18),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 5,
-            ),
-          ],
+          boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5)],
         ),
         child: Row(
           children: [
-            Icon(
-              icon,
-              color: const Color(0xFF4CAF50),
-            ),
+            Icon(icon, color: const Color.fromARGB(255, 30, 107, 33)),
 
             const SizedBox(width: 15),
 
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 16,
-              ),
-            ),
+            Text(title, style: const TextStyle(fontSize: 16)),
 
             const Spacer(),
 
-            const Icon(
-              Icons.arrow_forward_ios,
-              size: 16,
-            ),
+            const Icon(Icons.arrow_forward_ios, size: 16),
           ],
         ),
       ),
